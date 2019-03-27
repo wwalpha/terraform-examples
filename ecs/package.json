@@ -1,0 +1,17 @@
+{
+  "name": "ecs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ws:init": "terraform env new dev && terraform env new prod",
+    "ws:dev": "terraform env select dev",
+    "ws:prod": "terraform env select prod",
+    "create": "terraform init",
+    "plan": "terraform plan",
+    "app": "terraform apply -auto-approve",
+    "destroy": "terraform destroy"
+  },
+  "author": "",
+  "license": "ISC"
+}
