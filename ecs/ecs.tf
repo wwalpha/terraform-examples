@@ -29,5 +29,7 @@ resource "aws_ecs_service" "service" {
       "${aws_subnet.public_subnet_1.id}",
       "${aws_subnet.public_subnet_2.id}",
     ]
+    security_groups = "${aws_security_group.public_security_group}"
+    assign_public_ip = true
   }
 }
