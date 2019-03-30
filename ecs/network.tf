@@ -1,37 +1,29 @@
-resource "aws_vpc" "vpc" {
-  cidr_block = "${var.vpc_cidr_block}"
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+  name   = "${var.prefix}-vpc"
+  cidr   = "${var.vpc_cidr_block}"
+  azs    = "${var.vpc_azs}"
+
+  # private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets = "${var.vpc_public_subnets}"
+
+  # enable_nat_gateway = true
+  # enable_vpn_gateway = true
 
   tags = {
-    Name = "${local.prefix}-vpc"
-  }
-}
-
-resource "aws_subnet" "public_subnet_1" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.public1_cidr_block}"
-
-  tags = {
-    Name = "public-az1"
-  }
-}
-
-resource "aws_subnet" "public_subnet_2" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.public2_cidr_block}"
-
-  tags = {
-    Name = "public-az2"
+    Terraform   = "true"
+    Environment = "dev"
   }
 }
 
 resource "aws_security_group" "public_security_group" {
-  name = "${local.prefix}-sg"
-  vpc_id = "${aws_vpc.vpc.id}"
+  name   = "${var.prefix}-sg"
+  vpc_id = "${module.vpc.vpc_id}"
+
   egress = {
-    from_port= 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = "${var.container_port}"
+    to_port     = "${var.container_port}"
+    protocol    = "HTTP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
