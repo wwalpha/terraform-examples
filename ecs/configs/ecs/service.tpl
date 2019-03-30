@@ -1,10 +1,8 @@
 [
   {
-    "image": "nginx:latest",
-    "name": "nginx",
+    "image": "${image}",
+    "name": "${name}",
     "essential": true,
-    "cpu": 256,
-    "memoryReservation": 512,
     "portMappings": [
       {
         "hostPort": 80,

@@ -18,15 +18,44 @@ module "network" {
   }
 }
 
-resource "aws_security_group" "public_security_group" {
-  name   = "${var.prefix}-sg"
+# --------------------------------------------------------------------------------
+# Load Blance Security Group
+# --------------------------------------------------------------------------------
+resource "aws_security_group" "lb_sg" {
+  name   = "${var.prefix}-lb-sg"
   vpc_id = "${module.network.vpc_id}"
 
   ingress = {
     from_port   = "${var.container_port}"
     to_port     = "${var.container_port}"
-    protocol    = "TCP"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "${var.prefix}-lb-sg"
+  }
+}
+
+# --------------------------------------------------------------------------------
+# ECS Security Group
+# --------------------------------------------------------------------------------
+resource "aws_security_group" "ecs_sg" {
+  name   = "${var.prefix}-sg"
+  vpc_id = "${module.network.vpc_id}"
+
+  ingress = {
+    from_port       = "${var.container_port}"
+    to_port         = "${var.container_port}"
+    protocol        = "TCP"
+    security_groups = ["${aws_security_group.lb_sg.id}"]
   }
 
   egress = {
@@ -38,9 +67,5 @@ resource "aws_security_group" "public_security_group" {
 
   tags = {
     Name = "${var.prefix}-sg"
-  }
-
-  lifecycle = {
-    create_before_destroy = true
   }
 }

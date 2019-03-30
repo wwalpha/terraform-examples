@@ -39,6 +39,8 @@ data "template_file" "ecs_service" {
   template = "${file("${var.configs_path}/ecs/service.tpl")}"
 
   vars = {
+    name       = "${var.container_name}"
+    image      = "${var.container_image}"
     log_driver = "${var.ecs_log_driver}"
     log_group  = "${var.ecs_log_group}"
     region     = "${var.region}"
@@ -73,16 +75,21 @@ resource "aws_ecs_service" "service" {
   depends_on = [
     "aws_ecs_cluster.cluster",
     "aws_ecs_task_definition.task",
+    "aws_alb_target_group.alb_target_group",
   ]
 
   network_configuration = {
     subnets = ["${module.network.public_subnets}"]
 
-    security_groups = [
-      "${aws_security_group.public_security_group.id}",
-    ]
+    security_groups = ["${aws_security_group.ecs_sg.id}"]
 
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.alb_target_group.arn}"
+    container_name   = "${var.container_name}"
+    container_port   = "${var.container_port}"
   }
 }
 

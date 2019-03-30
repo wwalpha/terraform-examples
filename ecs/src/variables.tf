@@ -32,6 +32,10 @@ variable "vpc_public_subnets" {
 # --------------------------------------------------------------------------------
 # Container Configs
 # --------------------------------------------------------------------------------
+variable "container_name" {}
+
+variable "container_image" {}
+
 variable "container_cpu" {
   default = 256 # 0.25CPU
 }
