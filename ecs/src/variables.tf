@@ -1,31 +1,51 @@
 # --------------------------------------------------------------------------------
 # Terraform Configs
 # --------------------------------------------------------------------------------
-shared_credentials_file = "C:\\Users\\remoter\\.aws\\credentials"
+variable "shared_credentials_file" {}
 
-aws_profile = "default"
+variable "aws_profile" {}
+
+variable "configs_path" {}
 
 # --------------------------------------------------------------------------------
 # AWS Commons
 # --------------------------------------------------------------------------------
-region = "ap-northeast-1"
+variable "region" {}
 
-prefix = "dev-ecs"
+variable "bucket" {}
+
+variable "prefix" {}
 
 # --------------------------------------------------------------------------------
 # VPC Configs
 # --------------------------------------------------------------------------------
-vpc_cidr_block = "10.100.0.0/16"
+variable "vpc_cidr_block" {}
 
-vpc_azs = ["ap-northeast-1a", "ap-northeast-1c"]
+variable "vpc_azs" {
+  type = "list"
+}
 
-vpc_public_subnets = ["10.100.1.0/26", "10.100.1.128/26"]
+variable "vpc_public_subnets" {
+  type = "list"
+}
 
 # --------------------------------------------------------------------------------
 # Container Configs
 # --------------------------------------------------------------------------------
-container_cpu = 256
+variable "container_cpu" {
+  default = 256 # 0.25CPU
+}
 
-container_memory = 512
+variable "container_memory" {
+  default = 512 # 0.5G Memory
+}
 
-container_port = 80
+variable "container_port" {
+  default = 80
+}
+
+variable "ecs_log_group" {}
+
+variable "ecs_log_driver" {
+  default = "awslogs"
+}

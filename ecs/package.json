@@ -7,7 +7,7 @@
     "ws:init": "terraform env new dev && terraform env new prod",
     "ws:dev": "terraform env select dev",
     "ws:prod": "terraform env select prod",
-    "create": "terraform init",
+    "create": "terraform init src",
     "dev:plan": "terraform plan -var-file vars/dev.tfvars",
     "dev:app": "terraform apply -var-file vars/dev.tfvars -auto-approve",
     "destroy": "terraform destroy -var-file vars/dev.tfvars"
