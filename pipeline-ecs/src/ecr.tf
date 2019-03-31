@@ -1,3 +1,3 @@
 resource "aws_ecr_repository" "ecr" {
-  name = "${var.prefix}-ecr"
+  name = "${var.ecr_name}"
 }

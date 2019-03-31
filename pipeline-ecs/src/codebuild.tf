@@ -2,7 +2,7 @@
 # CodeBuild Project
 # --------------------------------------------------------------------------------
 resource "aws_codebuild_project" "codebuild" {
-  name = "${local.prefix}${var.project_name}"
+  name = "${var.prefix}-${var.project_name}"
 
   # description   = "${var.project_description}"
   build_timeout = "${var.build_timeout}"
@@ -13,6 +13,11 @@ resource "aws_codebuild_project" "codebuild" {
     location        = "${var.github_repo}"
     git_clone_depth = "${var.github_clone_depth}"
     buildspec       = "${var.build_spec}"
+  }
+
+  cache {
+    type     = "S3"
+    location = "${aws_s3_bucket.codebuild_cache.bucket}"
   }
 
   artifacts {

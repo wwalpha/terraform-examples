@@ -16,8 +16,7 @@
     {
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:logs:${region}:311178267809:log-group:${log_group}",
-        "arn:aws:logs:${region}:311178267809:log-group:${log_group}:*"
+        "*"
       ],
       "Action": [
         "logs:CreateLogGroup",

@@ -45,9 +45,14 @@ variable "build_env_vars" {
     },
     {
       name  = "ECR_REPOSITORY_NAME"
-      value = "xxxx"
+      value = "ecs-ecr"
     },
   ]
 }
 
 variable "artifacts_type" {}
+
+# --------------------------------------------------------------------------------
+# AWS ECR
+# --------------------------------------------------------------------------------
+variable "ecr_name" {}
