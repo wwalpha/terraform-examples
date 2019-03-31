@@ -41,11 +41,7 @@ variable "build_env_vars" {
     },
     {
       name  = "IMAGE_TAG"
-      value = "1.0"
-    },
-    {
-      name  = "ECR_REPOSITORY_NAME"
-      value = "ecs-ecr"
+      value = "latest"
     },
   ]
 }

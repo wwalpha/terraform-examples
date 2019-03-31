@@ -32,5 +32,5 @@ module "dev" {
 
   build_env_vars = "${var.build_env_vars}"
   artifacts_type = "${var.artifacts_type}"
-  ecr_name       = "ecs-${var.ecr_name}"
+  ecr_name       = "${var.ecr_name}"
 }
