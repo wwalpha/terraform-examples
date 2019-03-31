@@ -2,7 +2,7 @@
 # CodeBuild Project
 # --------------------------------------------------------------------------------
 resource "aws_codebuild_project" "codebuild" {
-  name = "${local.prefix}${var.codebuild_name}"
+  name = "${local.prefix}${var.project_name}"
 
   # description   = "${var.project_description}"
   build_timeout = "${var.build_timeout}"
@@ -24,11 +24,13 @@ resource "aws_codebuild_project" "codebuild" {
     image           = "${var.builder_image}"
     type            = "LINUX_CONTAINER"
     privileged_mode = true
+
+    environment_variable = "${var.build_env_vars}"
   }
 
-  count = "${var.github_count}"
+  tags = "${var.project_tags}"
 
-  tags = "${var.codebuild_tags}"
+  # count = "${var.github_count}"
 }
 
 # --------------------------------------------------------------------------------
@@ -49,7 +51,7 @@ resource "aws_iam_role" "codebuild_service_role" {
 }
 
 resource "aws_iam_policy" "codebuild_service_policy" {
-  name   = "${var.codebuild_name}CodeBuildPolicy"
+  name   = "${var.project_name}CodeBuildPolicy"
   policy = "${data.template_file.code_build_policy_tpl.rendered}"
 }
 

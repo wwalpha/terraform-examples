@@ -19,20 +19,18 @@ prefix = "dev-ecs"
 # --------------------------------------------------------------------------------
 # AWS CodeBuild
 # --------------------------------------------------------------------------------
-codebuild_name = "codebuild"
-
-build_timeout = 5
-
-build_spec = ""
-
-builder_image = "aws/codebuild/docker:18.09.0-1.7.0"
-
-builder_size = "small"
+project_name = "codebuild"
 
 github_repo = "https://github.com/wwalpha/aws-pipeline-ecs.git"
 
 github_clone_depth = 1
 
-artifacts_type = "NO_ARTIFACTS"
+builder_size = "small"
 
-github_count = 1
+builder_image = "aws/codebuild/docker:18.09.0-1.7.0"
+
+build_timeout = 5
+
+build_spec = ""
+
+artifacts_type = "NO_ARTIFACTS"

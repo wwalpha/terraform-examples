@@ -7,10 +7,10 @@
     "ws:init": "terraform env new dev && terraform env new prod",
     "ws:dev": "terraform env select dev",
     "ws:prod": "terraform env select prod",
-    "dev:init": "terraform init src",
-    "dev:plan": "terraform plan -var-file envs/dev/terraform.tfvars src",
-    "dev:app": "terraform apply -var-file envs/dev/terraform.tfvars -auto-approve src",
-    "destroy": "terraform destroy -var-file envs/dev/terraform.tfvars src"
+    "dev:init": "terraform init envs/dev",
+    "dev:plan": "terraform plan -var-file envs/dev/terraform.tfvars envs/dev",
+    "dev:app": "terraform apply -var-file envs/dev/terraform.tfvars -auto-approve envs/dev",
+    "destroy": "terraform destroy -var-file envs/dev/terraform.tfvars envs/dev"
   },
   "author": "",
   "license": "ISC"

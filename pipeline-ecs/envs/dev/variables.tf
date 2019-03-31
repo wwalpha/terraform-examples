@@ -1,6 +1,10 @@
 # --------------------------------------------------------------------------------
 # Terraform Configs
 # --------------------------------------------------------------------------------
+variable "shared_credentials_file" {}
+
+variable "aws_profile" {}
+
 variable "configs_path" {}
 
 # --------------------------------------------------------------------------------
@@ -16,7 +20,8 @@ variable "prefix" {}
 variable "project_name" {}
 
 variable "project_tags" {
-  type = "map"
+  type    = "map"
+  default = {}
 }
 
 variable "github_repo" {}
@@ -28,6 +33,21 @@ variable "build_spec" {}
 
 variable "build_env_vars" {
   type = "list"
+
+  default = [
+    {
+      name  = "IMAGE_REPO_NAME"
+      value = "ecs-express"
+    },
+    {
+      name  = "IMAGE_TAG"
+      value = "1.0"
+    },
+    {
+      name  = "ECR_REPOSITORY_NAME"
+      value = "xxxx"
+    },
+  ]
 }
 
 variable "artifacts_type" {}
