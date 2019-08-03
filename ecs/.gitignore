@@ -1,1 +1,4 @@
 /.terraform
+/load-balancer
+/security-group
+/configs
