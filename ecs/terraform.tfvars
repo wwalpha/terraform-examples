@@ -4,74 +4,37 @@
 configs_path = "./configs"
 
 # --------------------------------------------------------------------------------
-# AWS Commons
-# --------------------------------------------------------------------------------
-bucket = "tf-examples"
-
-prefix = "dev-ecs"
-
-# --------------------------------------------------------------------------------
 # VPC Configs
 # --------------------------------------------------------------------------------
-vpc_cidr_block = "10.100.0.0/16"
-
-vpc_azs = ["ap-northeast-1a", "ap-northeast-1c"]
-
-vpc_public_subnets = ["10.100.1.0/26", "10.100.1.128/26"]
-
+vpc_name           = "Fargate VPC"
+vpc_cidr_block     = "10.0.0.0/16"
+vpc_public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+# --------------------------------------------------------------------------------
+# AWS Security Group
+# --------------------------------------------------------------------------------
+alb_security_group_name = "ALBSecurityGroup"
+ecs_security_group_name = "ECSSecurityGroup"
 # --------------------------------------------------------------------------------
 # Elastic Container Service
 # --------------------------------------------------------------------------------
-ecs_cluster_name = "ecs-cluster"
-ecs_service_name = "sample-app-service"
-# --------------------------------------------------------------------------------
-# Container Configs
-# --------------------------------------------------------------------------------
-container_name = "sample-app"
-
-container_image = "httpd:2.4"
-
-container_cpu = 256
-
-container_memory = 512
-
-container_port = 80
-
+ecs_cluster_name                  = "ecs-cluster"
+ecs_service_name                  = "app-service"
+ecs_task_family                   = "ecs-task"
+ecs_desired_count                 = 1
+ecs_launch_type                   = "FARGATE"
+ecs_task_container_name           = "fargate-app"
+ecs_task_requires_compatibilities = "FARGATE"
+ecs_task_container_image          = "httpd:2.4"
 
 ecs_log_group = "/ecs/first-run-task-definition"
 
-# container_memory_reservation = "${var.container_memory_reservation}"
-
-
-# entrypoint                   = "${var.entrypoint}"
-# command                      = "${var.command}"
-
-
-# Fargate only awslog
-# log_driver                   = "${local.log_driver}"
-# log_options = "${local.log_options}"
-
-
-# port_mappings = "${local.port_mappings}"
-
-
-# healthcheck = "${var.healthcheck}"
-
-
-# dns_servers = "${var.dns_servers}"
-
-
-# environment = "${var.environment}"
-
-
-# secrets = "${var.secrets}"
-
-
-# working_directory = "${var.working_directory}"
-
-
-# readonly_root_filesystem = "${var.readonly_root_filesystem}"
-
-
-# mount_points = "${var.mount_points}"
+# --------------------------------------------------------------------------------
+# Application Load Balancing
+# --------------------------------------------------------------------------------
+lb_name                     = "fargate-alb"
+lb_type                     = "application"
+lb_protocol                 = "HTTP"
+lb_port                     = 80
+lb_target_group_name        = "ECSTargetGroup"
+lb_target_group_target_type = "ip"
 
