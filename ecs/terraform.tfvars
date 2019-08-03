@@ -1,17 +1,11 @@
 # --------------------------------------------------------------------------------
 # Terraform Configs
 # --------------------------------------------------------------------------------
-shared_credentials_file = "C:\\Users\\remoter\\.aws\\credentials"
-
-aws_profile = "default"
-
 configs_path = "./configs"
 
 # --------------------------------------------------------------------------------
 # AWS Commons
 # --------------------------------------------------------------------------------
-region = "ap-northeast-1"
-
 bucket = "tf-examples"
 
 prefix = "dev-ecs"
@@ -26,11 +20,16 @@ vpc_azs = ["ap-northeast-1a", "ap-northeast-1c"]
 vpc_public_subnets = ["10.100.1.0/26", "10.100.1.128/26"]
 
 # --------------------------------------------------------------------------------
+# Elastic Container Service
+# --------------------------------------------------------------------------------
+ecs_cluster_name = "ecs-cluster"
+ecs_service_name = "sample-app-service"
+# --------------------------------------------------------------------------------
 # Container Configs
 # --------------------------------------------------------------------------------
-container_name = "nginx"
+container_name = "sample-app"
 
-container_image = "nginx:latest"
+container_image = "httpd:2.4"
 
 container_cpu = 256
 
@@ -38,9 +37,8 @@ container_memory = 512
 
 container_port = 80
 
-essential = true
 
-ecs_log_group = "/ecs/dev-fargate"
+ecs_log_group = "/ecs/first-run-task-definition"
 
 # container_memory_reservation = "${var.container_memory_reservation}"
 

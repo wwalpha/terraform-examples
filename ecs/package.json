@@ -2,15 +2,11 @@
   "name": "ecs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "ws:init": "terraform env new dev && terraform env new prod",
-    "ws:dev": "terraform env select dev",
-    "ws:prod": "terraform env select prod",
-    "dev:init": "terraform init src",
-    "dev:plan": "terraform plan -var-file envs/dev/terraform.tfvars src",
-    "dev:app": "terraform apply -var-file envs/dev/terraform.tfvars -auto-approve src",
-    "destroy": "terraform destroy -var-file envs/dev/terraform.tfvars src"
+    "ws:init": "terraform env new dev",
+    "plan": "terraform plan",
+    "app": "terraform apply -auto-approve",
+    "destroy": "terraform destroy -auto-approve"
   },
   "author": "",
   "license": "ISC"

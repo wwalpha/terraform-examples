@@ -1,8 +1,8 @@
 # --------------------------------------------------------------------------------
 # Amazon ECS Cluster
 # --------------------------------------------------------------------------------
-resource "aws_ecs_cluster" "cluster" {
-  name = "${var.prefix}-cluster"
+resource "aws_ecs_cluster" "fargate" {
+  name = "${var.ecs_cluster_name}"
 }
 
 # module "container_definitions" {
@@ -41,15 +41,17 @@ data "template_file" "ecs_service" {
   vars = {
     name       = "${var.container_name}"
     image      = "${var.container_image}"
+    cpu        = "${var.container_cpu}"
+    memory     = "${var.container_memory}"
     log_driver = "${var.ecs_log_driver}"
     log_group  = "${var.ecs_log_group}"
-    region     = "${var.region}"
+    region     = "${local.region}"
   }
 }
 
-resource "aws_ecs_task_definition" "task" {
-  depends_on = ["aws_iam_role.ecs_task_exec_role"]
-  family     = "${var.prefix}-task"
+resource "aws_ecs_task_definition" "fargate" {
+  # depends_on = ["aws_iam_role.ecs_task_exec_role"]
+  family = "first-run-task-definition"
 
   container_definitions = "${data.template_file.ecs_service.rendered}"
 
@@ -59,55 +61,56 @@ resource "aws_ecs_task_definition" "task" {
   network_mode             = "awsvpc"
 
   execution_role_arn = "${aws_iam_role.ecs_task_exec_role.arn}"
-  task_role_arn      = "${aws_iam_role.ecs_task_exec_role.arn}"
+  # task_role_arn      = "${aws_iam_role.ecs_task_exec_role.arn}"
 }
 
 # --------------------------------------------------------------------------------
 # Amazon ECS Service
 # --------------------------------------------------------------------------------
-resource "aws_ecs_service" "service" {
-  name            = "${var.prefix}-service"
-  cluster         = "${aws_ecs_cluster.cluster.id}"
-  task_definition = "${aws_ecs_task_definition.task.arn}"
+resource "aws_ecs_service" "fargate" {
+  name            = "${var.ecs_service_name}"
+  cluster         = "${aws_ecs_cluster.fargate.id}"
+  task_definition = "${aws_ecs_task_definition.fargate.arn}"
   desired_count   = 1
   launch_type     = "FARGATE"
 
-  depends_on = [
-    "aws_ecs_cluster.cluster",
-    "aws_ecs_task_definition.task",
-    "aws_alb_target_group.alb_target_group",
-  ]
+  health_check_grace_period_seconds = 0
+  # depends_on = [
+  #   "aws_ecs_cluster.cluster",
+  #   "aws_ecs_task_definition.task",
+  #   "aws_alb_target_group.alb_target_group",
+  # ]
 
-  network_configuration = {
-    subnets = ["${module.network.public_subnets}"]
+  # network_configuration = {
+  #   subnets = ["${module.network.public_subnets}"]
 
-    security_groups = ["${aws_security_group.ecs_sg.id}"]
+  #   security_groups = ["${aws_security_group.ecs_sg.id}"]
 
-    assign_public_ip = true
-  }
+  #   assign_public_ip = true
+  # }
 
-  load_balancer {
-    target_group_arn = "${aws_alb_target_group.alb_target_group.arn}"
-    container_name   = "${var.container_name}"
-    container_port   = "${var.container_port}"
-  }
+  # load_balancer {
+  #   target_group_arn = "${aws_alb_target_group.alb_target_group.arn}"
+  #   container_name   = "${var.container_name}"
+  #   container_port   = "${var.container_port}"
+  # }
 }
 
 # --------------------------------------------------------------------------------
 # ECS Task Execute Role
 # --------------------------------------------------------------------------------
 resource "aws_iam_role" "ecs_task_exec_role" {
-  name               = "${var.prefix}-task-execution-role"
+  name               = "ecsTaskExecutionRole"
   assume_role_policy = "${file("${var.configs_path}/iam/ecs_task_exec_role.json")}"
 }
 
-resource "aws_iam_policy" "ecs_task_exec_policy" {
-  name   = "ECSTaskExecutionPolicy"
-  policy = "${file("${var.configs_path}/iam/ecs_task_exec_policy.json")}"
-}
+# resource "aws_iam_policy" "ecs_task_exec_policy" {
+#   name   = "ECSTaskExecutionPolicy"
+#   policy = "${file("${var.configs_path}/iam/ecs_task_exec_policy.json")}"
+# }
 
-resource "aws_iam_policy_attachment" "ecs_task_exec_role_policy_attach" {
-  name       = "AmazonECSTaskExecutionRolePolicyAttach"
-  roles      = ["${aws_iam_role.ecs_task_exec_role.name}"]
-  policy_arn = "${aws_iam_policy.ecs_task_exec_policy.arn}"
-}
+# resource "aws_iam_policy_attachment" "ecs_task_exec_role_policy_attach" {
+#   name       = "AmazonECSTaskExecutionRolePolicyAttach"
+#   roles      = ["${aws_iam_role.ecs_task_exec_role.name}"]
+#   policy_arn = "${aws_iam_policy.ecs_task_exec_policy.arn}"
+# }
