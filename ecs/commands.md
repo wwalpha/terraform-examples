@@ -1,6 +1,6 @@
 terraform import aws_ecs_cluster.this ecs-cluster
 
-terraform import aws_ecs_task_definition.this arn:aws:ecs:ap-northeast-1:818282415957:task-definition/first-run-task-definition:4
+terraform import aws_ecs_task_definition.this arn:aws:ecs:ap-northeast-1:818282415957:task-definition/ecs-task:4
 terraform import aws_iam_role.ecs_task_exec_role ecsTaskExecutionRole
 
 terraform import aws_ecs_service.fargate ecs-cluster/sample-app-service
@@ -18,3 +18,7 @@ terraform import aws_security_group.ecs_sg sg-057a63e66db0641fd
 
 terraform import aws_lb.alb arn:aws:elasticloadbalancing:ap-northeast-1:818282415957:loadbalancer/app/EC2Co-EcsEl-I63KO0M4L0AN/9c3c28f1a29dfc13
 terraform import aws_lb_target_group.alb_tg arn:aws:elasticloadbalancing:ap-northeast-1:818282415957:targetgroup/EC2Co-Defau-UQVRHVJHNVL2/86dd97726262652b
+
+terraform import aws_codebuild_project.this ECSCodeBuild
+terraform import aws_codepipeline.this ECSPipeline
+terraform import aws_codedeploy_deployment_group.this my-application:my-deployment-group

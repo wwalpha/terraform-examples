@@ -50,3 +50,6 @@ variable "lb_protocol" {}
 variable "lb_port" {}
 variable "lb_target_group_name" {}
 variable "lb_target_group_target_type" {}
+variable "github_token" {
+
+}

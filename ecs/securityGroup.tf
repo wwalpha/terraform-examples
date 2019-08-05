@@ -26,7 +26,7 @@ module "alb_sg" {
 }
 
 # --------------------------------------------------------------------------------
-# ECS Security Group
+# ECS Security Group - Elastic Container Service
 # --------------------------------------------------------------------------------
 module "ecs_sg" {
   # source = "./security-group"

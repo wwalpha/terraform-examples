@@ -13,7 +13,7 @@ data "template_file" "container" {
 
   vars = {
     name       = "${var.ecs_task_container_name}"
-    image      = "${var.ecs_task_container_image}"
+    image      = "${aws_ecr_repository.this.repository_url}:latest"
     cpu        = "${var.ecs_task_container_cpu}"
     memory     = "${var.ecs_task_container_memory}"
     log_driver = "${var.ecs_log_driver}"
@@ -26,7 +26,7 @@ data "template_file" "container" {
 # Amazon ECS Task Definition
 # --------------------------------------------------------------------------------
 resource "aws_ecs_task_definition" "this" {
-  depends_on               = ["aws_iam_role.task"]
+  depends_on               = ["aws_iam_role.task", "aws_ecr_repository.this"]
   family                   = "${var.ecs_task_family}"
   cpu                      = "${var.ecs_task_container_cpu}"
   memory                   = "${var.ecs_task_container_memory}"
@@ -35,11 +35,11 @@ resource "aws_ecs_task_definition" "this" {
   network_mode             = "awsvpc"
   execution_role_arn       = "${aws_iam_role.task.arn}"
 }
-
 # --------------------------------------------------------------------------------
 # Amazon ECS Service
 # --------------------------------------------------------------------------------
 resource "aws_ecs_service" "this" {
+  depends_on      = ["aws_lb_listener.this", "aws_ecs_task_definition.this"]
   name            = "${var.ecs_service_name}"
   cluster         = "${aws_ecs_cluster.this.id}"
   task_definition = "${local.task_definition}"
@@ -70,7 +70,7 @@ resource "aws_ecs_service" "this" {
 # --------------------------------------------------------------------------------
 resource "aws_iam_role" "task" {
   name               = "${var.ecs_cluster_name}Role"
-  assume_role_policy = "${file("${var.configs_path}/iam/ecs_assume_policy.json")}"
+  assume_role_policy = "${file("${var.configs_path}/iam/ecs_assume_role.json")}"
 }
 
 resource "aws_iam_role_policy_attachment" "task" {
